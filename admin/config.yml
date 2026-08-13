@@ -1,0 +1,109 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# For local testing without Netlify Identity, run `npx decap-server` in a
+# second terminal and uncomment the line below. See README.md for details.
+# local_backend: true
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+publish_mode: editorial_workflow
+
+collections:
+  # Day-to-day News lives on Substack now (see README.md "Adding News
+  # posts") — this collection is only for the Projects section.
+  - name: "projects"
+    label: "News & Projects → Projects"
+    folder: "src/content/projects"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime" }
+      - label: "Status"
+        name: "status"
+        widget: "select"
+        options: ["Ongoing", "Completed"]
+        default: "Ongoing"
+      - { label: "Summary", name: "summary", widget: "text" }
+      - { label: "Cover Image", name: "cover", widget: "image", required: false }
+      - { label: "Cover Image Alt Text", name: "coverAlt", widget: "string", required: false }
+      - { label: "Link (e.g. grant program page, capstone paper)", name: "link", widget: "string", required: false }
+      - { label: "Link Label", name: "linkLabel", widget: "string", required: false }
+      - { label: "Draft", name: "draft", widget: "boolean", default: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "explore"
+    label: "Explore & Visit"
+    folder: "src/content/explore"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options: ["Trail", "Water & Pond", "Itinerary", "Seasonal Activity"]
+      - label: "Best Season(s)"
+        name: "season"
+        widget: "select"
+        multiple: true
+        options: ["Spring", "Summer", "Fall", "Winter"]
+        default: ["Spring", "Summer", "Fall", "Winter"]
+      - { label: "Summary", name: "summary", widget: "text" }
+      - { label: "Cover Image", name: "cover", widget: "image", required: false }
+      - { label: "Cover Image Alt Text", name: "coverAlt", widget: "string", required: false }
+      - { label: "Display Order", name: "order", widget: "number", default: 0 }
+      - { label: "Body", name: "body", widget: "markdown", required: false }
+
+  - name: "resources"
+    label: "Explore & Visit → Village Map"
+    folder: "src/content/resources"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    fields:
+      - { label: "Name", name: "name", widget: "string" }
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options: ["Services", "Civic", "Businesses", "Historic Sites"]
+      - { label: "Address", name: "address", widget: "string", required: false }
+      - { label: "Latitude", name: "lat", widget: "number", required: false, value_type: "float" }
+      - { label: "Longitude", name: "lng", widget: "number", required: false, value_type: "float" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Hours", name: "hours", widget: "string", required: false }
+      - { label: "Phone", name: "phone", widget: "string", required: false }
+      - { label: "Website Link", name: "link", widget: "string", required: false }
+
+  - name: "board"
+    label: "Community Resources → Offers & Needs"
+    folder: "src/content/board"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    fields:
+      - label: "Type"
+        name: "type"
+        widget: "select"
+        options: ["Offer", "Need"]
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Your Name", name: "name", widget: "string", required: false }
+      - { label: "Contact (email or phone)", name: "contact", widget: "string", required: false }
+      - { label: "Date", name: "date", widget: "datetime", default: "" }
+      - { label: "Draft", name: "draft", widget: "boolean", default: false }
+
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - label: "Homepage"
+        name: "homepage"
+        file: "src/content/settings/homepage.json"
+        fields:
+          - { label: "Tagline", name: "tagline", widget: "string" }
+          - { label: "Hero Image", name: "heroImage", widget: "image", required: false }
