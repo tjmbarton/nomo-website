@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import EntryCard from '../components/EntryCard.astro';
+import FeaturedStrip from '../components/FeaturedStrip.astro';
+import { getEntry } from 'astro:content';
+
+const homepage = await getEntry('settings', 'homepage');
+---
+
+<BaseLayout title="Home">
+	{
+		/* Hero banner text — the big dark-green arrival section at the top of the
+		   homepage. "subtitle" instead comes from src/content/settings/homepage.json
+		   ("tagline" field), so edit the tagline there, not here. */
+	}
+	<Hero
+		eyebrow="Washington County, Vermont"
+		title="A village on the pond, past the old mill."
+		subtitle={homepage?.data.tagline}
+	/>
+
+	{/* The 3 cards below the hero — title/description/button text for each */}
+	<section class="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+		<div class="grid gap-6 md:grid-cols-3">
+			<EntryCard
+				href="/explore"
+				title="Visit"
+				description="Trails, the pond, Rich's Hollow, and seasonal things to do when you're passing through."
+				cta="Plan a visit"
+			/>
+			<EntryCard
+				href="/community"
+				title="Community"
+				description="An offers & needs board — what neighbors have to give, and what they're looking for."
+				cta="See the board"
+			/>
+			<EntryCard
+				href="/contact"
+				title="Get Involved"
+				description="Volunteer, join a project, or just say hello. The village runs on people who pitch in."
+				cta="Get involved"
+			/>
+		</div>
+	</section>
+
+	{/* "Latest from the village" strip — pulls from Substack automatically, see src/components/FeaturedStrip.astro */}
+	<FeaturedStrip />
+</BaseLayout>

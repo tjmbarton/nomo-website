@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import OffersNeedsBoard from '../components/OffersNeedsBoard.astro';
+---
+
+<BaseLayout title="Community Resources" description="North Montpelier's offers & needs board — a place to give and ask for help.">
+	<PageIntro
+		eyebrow="Community Resources"
+		title="Offers & Needs"
+		subtitle="What neighbors have to give, and what they're looking for."
+	/>
+
+	{
+		/* The Offers/Needs posts themselves come from markdown files in
+		   src/content/board/*.md — add one via the "+ Post an offer or need"
+		   button (opens the CMS editor) or by adding a file directly. The intro
+		   blurb and column labels ("Offers"/"Needs") are edited in
+		   src/components/OffersNeedsBoard.astro. */
+	}
+	<section class="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
+		<OffersNeedsBoard />
+	</section>
+</BaseLayout>

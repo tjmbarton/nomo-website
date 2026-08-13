@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+
+const entries = (await getCollection('board', ({ data }) => !data.draft)).sort(
+	(a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const offers = entries.filter((e) => e.data.type === 'Offer');
+const needs = entries.filter((e) => e.data.type === 'Need');
+
+const columns = [
+	{ label: 'Offers', tint: 'forest', entries: offers, empty: 'No offers posted yet.' },
+	{ label: 'Needs', tint: 'brick', entries: needs, empty: 'No needs posted yet.' },
+] as const;
+---
+
+<div>
+	<div class="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-granite-light/60 bg-card p-5">
+		<p class="text-sm text-granite">
+			A place to offer what you have, or ask for what you need — tools, rides, firewood, a hand moving
+			something heavy. Posts go through the same site editor everyone else uses.
+		</p>
+		<a
+			href="/admin/#/collections/board/new"
+			class="shrink-0 rounded-full bg-forest px-4 py-2 text-sm font-semibold text-paper hover:bg-forest-dark"
+		>
+			+ Post an offer or need
+		</a>
+	</div>
+
+	<div class="grid gap-8 lg:grid-cols-2">
+		{
+			columns.map((column) => (
+				<div>
+					<h2 class:list={['mb-4 font-display text-2xl font-semibold', column.tint === 'forest' ? 'text-forest' : 'text-brick']}>
+						{column.label}
+					</h2>
+
+					<div class="flex flex-col gap-4">
+						{column.entries.map((entry) => (
+							<div class="rounded-lg border border-granite-light/60 bg-card p-5 shadow-sm">
+								<div class="flex items-start justify-between gap-3">
+									<h3 class="font-display text-lg font-semibold text-forest">{entry.data.title}</h3>
+									<time datetime={entry.data.date.toISOString()} class="shrink-0 text-xs uppercase tracking-wide text-granite">
+										{entry.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+									</time>
+								</div>
+								<p class="mt-2 text-sm text-ink">{entry.data.description}</p>
+								{(entry.data.name || entry.data.contact) && (
+									<p class="mt-3 text-xs text-granite">
+										{entry.data.name}
+										{entry.data.name && entry.data.contact && ' · '}
+										{entry.data.contact}
+									</p>
+								)}
+							</div>
+						))}
+
+						{column.entries.length === 0 && <p class="text-sm text-granite">{column.empty}</p>}
+					</div>
+				</div>
+			))
+		}
+	</div>
+</div>

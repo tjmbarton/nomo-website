@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import ContactForm from '../components/ContactForm.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+---
+
+<BaseLayout title="Get Involved" description="Volunteer, join the newsletter, or get in touch with North Montpelier.">
+	<PageIntro
+		eyebrow="Get Involved"
+		title="The village runs on people who pitch in"
+		subtitle="Volunteer for a project, join the newsletter, or just say hello."
+	/>
+
+	<section class="mx-auto grid max-w-5xl gap-10 px-4 pb-16 sm:px-6 md:grid-cols-2">
+		{/* "interestOptions" below is the checkbox list on the volunteer form */}
+		<ContactForm
+			formName="volunteer"
+			title="Volunteer interest"
+			interestOptions={["Trail maintenance", "Events & festivals", "Grant/project committees", "Newsletter & communications"]}
+		/>
+
+		<div class="flex flex-col gap-10">
+			<div class="rounded-lg border border-granite-light/60 bg-card p-6 shadow-sm">
+				<NewsletterSignup />
+			</div>
+			<ContactForm formName="contact" title="Or, send a general message" />
+		</div>
+	</section>
+</BaseLayout>

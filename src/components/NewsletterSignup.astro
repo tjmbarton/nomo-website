@@ -1,0 +1,60 @@
+---
+// Submits via Formspree — see the matching comment in ContactForm.astro.
+// [PLACEHOLDER] Set PUBLIC_FORMSPREE_ID in a .env file to activate.
+const FORMSPREE_ID = import.meta.env.PUBLIC_FORMSPREE_ID;
+
+interface Props {
+	compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<div>
+	<p class:list={["mb-3 font-display font-semibold", compact ? "text-sm uppercase tracking-wide text-brass-light" : "text-lg text-forest"]}>
+		Stay in the loop
+	</p>
+	<p class:list={["mb-4 text-sm", compact ? "text-paper/85" : "text-granite"]}>
+		Get occasional updates on village events, grant projects, and news. No spam, unsubscribe anytime.
+	</p>
+	<form
+		method="POST"
+		action={FORMSPREE_ID ? `https://formspree.io/f/${FORMSPREE_ID}` : undefined}
+		class="flex flex-col gap-2 sm:flex-row"
+	>
+		<input type="hidden" name="_subject" value="New newsletter signup from the North Montpelier site" />
+		<p class="hidden">
+			<label>Don't fill this out if you're human: <input name="_gotcha" /></label>
+		</p>
+		<label for="newsletter-email" class="sr-only">Email address</label>
+		<input
+			id="newsletter-email"
+			name="email"
+			type="email"
+			required
+			placeholder="you@example.com"
+			class:list={[
+				"min-h-11 flex-1 rounded border px-3 py-2 text-sm text-ink placeholder:text-granite focus:outline-none focus:ring-2 focus:ring-brass",
+				compact ? "border-paper/30 bg-paper/10 text-paper placeholder:text-paper/50" : "border-granite-light bg-card",
+			]}
+		/>
+		<button
+			type="submit"
+			class:list={[
+				"min-h-11 rounded px-4 py-2 text-sm font-semibold transition-colors",
+				compact
+					? "bg-brass text-ink hover:bg-brass-light"
+					: "bg-brick text-paper hover:bg-brick-dark",
+			]}
+		>
+			Sign up
+		</button>
+	</form>
+	{
+		!FORMSPREE_ID && (
+			<p class:list={["mt-2 text-xs", compact ? "text-paper/60" : "text-brick"]}>
+				[PLACEHOLDER] Not connected yet — set PUBLIC_FORMSPREE_ID (see README.md).
+			</p>
+		)
+	}
+</div>

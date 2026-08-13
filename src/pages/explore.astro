@@ -1,0 +1,83 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import ResourceMapStub from '../components/ResourceMapStub.astro';
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+
+const entries = (await getCollection('explore')).sort((a, b) => a.data.order - b.data.order);
+
+const places = (await getCollection('resources'))
+	.filter((r) => r.data.lat != null && r.data.lng != null)
+	.sort((a, b) => a.data.name.localeCompare(b.data.name))
+	.map((r) => ({
+		name: r.data.name,
+		category: r.data.category,
+		address: r.data.address,
+		lat: r.data.lat as number,
+		lng: r.data.lng as number,
+		link: r.data.link,
+	}));
+---
+
+<BaseLayout title="Explore & Visit" description="Trails, the pond, Rich's Hollow, and things to do in North Montpelier.">
+	<PageIntro
+		eyebrow="Explore & Visit"
+		title="The pond, the trails, the hollow."
+		subtitle="A small village with a lot of ground worth wandering, in every season."
+	/>
+
+	{
+		/* The trail/pond/itinerary CARDS below come from markdown files in
+		   src/content/explore/*.md — edit those files (title, category, summary,
+		   season, cover photo) to change what shows here, not this loop. */
+	}
+	<section class="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
+		<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+			{
+				entries.map((entry) => (
+					<div class="flex flex-col overflow-hidden rounded-lg border border-granite-light/60 bg-card shadow-sm">
+						<div class="aspect-[4/3] w-full overflow-hidden bg-granite-light">
+							{entry.data.cover ? (
+								<Image
+									src={entry.data.cover}
+									alt={entry.data.coverAlt ?? ''}
+									width={480}
+									height={360}
+									class="h-full w-full object-cover"
+								/>
+							) : (
+								<div class="flex h-full w-full items-center justify-center text-sm text-granite">
+									[PLACEHOLDER PHOTO]
+								</div>
+							)}
+						</div>
+						<div class="flex flex-1 flex-col p-5">
+							<span class="mb-2 w-fit rounded-full bg-forest/10 px-2 py-0.5 text-xs font-semibold text-forest">
+								{entry.data.category}
+							</span>
+							<h3 class="font-display text-xl font-semibold text-forest">{entry.data.title}</h3>
+							<p class="mt-2 flex-1 text-sm text-granite">{entry.data.summary}</p>
+							<p class="mt-3 text-xs uppercase tracking-wide text-granite">
+								Best in: {entry.data.season.join(', ')}
+							</p>
+						</div>
+					</div>
+				))
+			}
+		</div>
+	</section>
+
+	{
+		/* Map MARKERS come from src/content/resources/*.md (name, category,
+		   address, lat/lng, link per file) — add/edit/delete markdown files
+		   there to change what pins show on the map. The section heading/intro
+		   text just below is edited directly here. */
+	}
+	<section class="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
+		<h2 class="mb-2 font-display text-2xl font-semibold text-forest">Village map</h2>
+		<p class="mb-8 max-w-2xl text-granite">Key spots around North Montpelier — tap a marker for details.</p>
+
+		<ResourceMapStub resources={places} />
+	</section>
+</BaseLayout>

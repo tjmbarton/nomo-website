@@ -1,0 +1,170 @@
+---
+// Activates automatically once PUBLIC_MAPBOX_TOKEN is set in the environment —
+// see README.md "Activating the community map" for the swap-in steps.
+import 'mapbox-gl/dist/mapbox-gl.css';
+
+interface MapResource {
+	name: string;
+	category: string;
+	address?: string;
+	lat: number;
+	lng: number;
+	link?: string;
+}
+
+interface Props {
+	resources: MapResource[];
+}
+
+const { resources } = Astro.props;
+const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN;
+
+// North Montpelier village center (junction of VT-14 and VT-214).
+const VILLAGE_CENTER = { lat: 44.30361, lng: -72.44639 };
+
+// Marker colors follow the site's "Mill & Millpond" category palette.
+const categoryColors: Record<string, string> = {
+	Services: '#6e6b64',
+	Civic: '#2f4a3c',
+	Businesses: '#a8482f',
+	'Historic Sites': '#b98b3e',
+};
+
+const categoriesPresent = [...new Set(resources.map((r) => r.category))];
+---
+
+{
+	mapboxToken ? (
+		<div class="overflow-hidden rounded-lg border border-granite-light/60 bg-card shadow-sm">
+			<div id="village-map" class="h-[520px] w-full" data-token={mapboxToken} data-center={JSON.stringify(VILLAGE_CENTER)} data-resources={JSON.stringify(resources)} />
+			{categoriesPresent.length > 0 && (
+				<div class="flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-granite-light/60 px-5 py-3 text-xs text-granite">
+					{categoriesPresent.map((cat) => (
+						<span class="flex items-center gap-1.5">
+							<span class="inline-block h-2.5 w-2.5 rounded-full" style={`background-color: ${categoryColors[cat] ?? '#2f4a3c'}`} />
+							{cat}
+						</span>
+					))}
+				</div>
+			)}
+		</div>
+	) : (
+		<div class="flex h-[500px] w-full flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed border-granite-light bg-card p-8 text-center">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="h-12 w-12 text-granite">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+			</svg>
+			<p class="font-display text-lg font-semibold text-forest">Village map coming soon</p>
+			<p class="max-w-sm text-sm text-granite">
+				The map activates once a Mapbox token is configured — see README.md for the setup steps.
+			</p>
+		</div>
+	)
+}
+
+<script>
+	import mapboxgl from 'mapbox-gl';
+
+	const el = document.getElementById('village-map');
+
+	if (el) {
+		const center = JSON.parse(el.dataset.center ?? '{}') as { lat: number; lng: number };
+		const resources = JSON.parse(el.dataset.resources ?? '[]') as {
+			name: string;
+			category: string;
+			address?: string;
+			lat: number;
+			lng: number;
+			link?: string;
+		}[];
+
+		mapboxgl.accessToken = el.dataset.token ?? '';
+
+		const categoryColors: Record<string, string> = {
+			Services: '#6e6b64',
+			Civic: '#2f4a3c',
+			Businesses: '#a8482f',
+			'Historic Sites': '#b98b3e',
+		};
+
+		const map = new mapboxgl.Map({
+			container: el,
+			style: 'mapbox://styles/mapbox/outdoors-v12',
+			center: [center.lng, center.lat],
+			zoom: 13,
+		});
+
+		map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
+
+		if (resources.length > 0) {
+			const bounds = new mapboxgl.LngLatBounds();
+
+			resources.forEach((resource) => {
+				const popupHtml = `
+					<strong>${resource.name}</strong>
+					<span class="village-map-popup-category">${resource.category}</span>
+					${resource.address ? `<span class="village-map-popup-address">${resource.address}</span>` : ''}
+					${resource.link ? `<a href="${resource.link}" target="_blank" rel="noopener noreferrer">Visit website &rarr;</a>` : ''}
+				`;
+
+				const popup = new mapboxgl.Popup({ offset: 14, closeButton: false }).setHTML(popupHtml);
+
+				new mapboxgl.Marker({ color: categoryColors[resource.category] ?? '#2f4a3c' })
+					.setLngLat([resource.lng, resource.lat])
+					.setPopup(popup)
+					.addTo(map);
+
+				bounds.extend([resource.lng, resource.lat]);
+			});
+
+			map.fitBounds(bounds, { padding: 50, maxZoom: 15 });
+		}
+	}
+</script>
+
+<style is:global>
+	/* Restyle Mapbox's default popup to match the "Mill & Millpond" palette. */
+	.mapboxgl-popup-content {
+		background: var(--color-card);
+		color: var(--color-ink);
+		font-family: var(--font-sans);
+		padding: 0.85rem 1rem;
+		border-radius: 0.5rem;
+		box-shadow: 0 8px 24px -8px rgba(43, 38, 33, 0.35);
+	}
+	.mapboxgl-popup-content strong {
+		display: block;
+		font-family: var(--font-display);
+		font-size: 0.95rem;
+		color: var(--color-forest);
+	}
+	.mapboxgl-popup-content .village-map-popup-category {
+		display: block;
+		margin-top: 0.15rem;
+		font-size: 0.7rem;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		color: var(--color-granite);
+	}
+	.mapboxgl-popup-content .village-map-popup-address {
+		display: block;
+		margin-top: 0.35rem;
+		font-size: 0.8rem;
+		color: var(--color-ink);
+	}
+	.mapboxgl-popup-content a {
+		display: inline-block;
+		margin-top: 0.5rem;
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: var(--color-brick);
+	}
+	.mapboxgl-popup-tip {
+		border-top-color: var(--color-card) !important;
+		border-bottom-color: var(--color-card) !important;
+	}
+	.mapboxgl-ctrl-group {
+		border-radius: 0.5rem !important;
+		overflow: hidden;
+		box-shadow: 0 4px 12px -4px rgba(43, 38, 33, 0.3) !important;
+	}
+</style>

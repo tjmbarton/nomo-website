@@ -1,0 +1,31 @@
+---
+import type { SubstackPost } from '../lib/substack';
+
+interface Props {
+	post: SubstackPost;
+}
+
+const { post } = Astro.props;
+---
+
+<a
+	href={post.link}
+	target="_blank"
+	rel="noopener noreferrer"
+	class="group flex flex-col rounded-lg border border-granite-light/60 bg-card p-5 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
+>
+	<span class="mb-2 w-fit rounded-full bg-brick/10 px-2 py-0.5 text-xs font-semibold text-brick-dark">News</span>
+	<h3 class="font-display text-xl font-semibold text-forest group-hover:text-brick">{post.title}</h3>
+	<p class="mt-2 flex-1 text-sm text-granite">{post.description}</p>
+	<div class="mt-3 flex items-center justify-between">
+		<time datetime={post.pubDate.toISOString()} class="text-xs uppercase tracking-wide text-granite">
+			{post.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+		</time>
+		<span class="inline-flex items-center gap-1 text-xs font-semibold text-brick group-hover:text-brick-dark">
+			Read on Substack
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3.5 w-3.5">
+				<path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L11.29 6.15a.75.75 0 111.02-1.1l4.5 4.25a.75.75 0 010 1.1l-4.5 4.25a.75.75 0 11-1.02-1.1l3.098-3.1H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+			</svg>
+		</span>
+	</div>
+</a>

@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import CalendarEmbed from '../components/CalendarEmbed.astro';
+---
+
+<BaseLayout title="Events" description="Community events calendar for North Montpelier, Vermont.">
+	<PageIntro eyebrow="Events" title="What's happening in the village" />
+
+	{
+		/* The calendar itself is NOT edited here — it's the live Google Calendar
+		   embed in src/components/CalendarEmbed.astro. Add/edit events directly
+		   in that shared Google Calendar and they'll show up here automatically. */
+	}
+	<section class="mx-auto max-w-4xl px-4 pb-16 sm:px-6">
+		<CalendarEmbed />
+	</section>
+</BaseLayout>

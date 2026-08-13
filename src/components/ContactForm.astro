@@ -1,0 +1,99 @@
+---
+// Submits via Formspree (see README.md "Connecting the contact/newsletter
+// forms") instead of Netlify Forms, since this site isn't hosted on Netlify.
+// [PLACEHOLDER] Set PUBLIC_FORMSPREE_ID in a .env file once you create a free
+// form at https://formspree.io — until then this renders fine but submitting
+// it won't go anywhere, and a small notice says so below the button.
+const FORMSPREE_ID = import.meta.env.PUBLIC_FORMSPREE_ID;
+
+interface Props {
+	formName?: string;
+	title?: string;
+	interestOptions?: string[];
+};
+
+const {
+	formName = 'contact',
+	title = 'Send us a message',
+	interestOptions,
+} = Astro.props;
+---
+
+<form
+	method="POST"
+	action={FORMSPREE_ID ? `https://formspree.io/f/${FORMSPREE_ID}` : undefined}
+	class="flex flex-col gap-4 rounded-lg border border-granite-light/60 bg-card p-6 shadow-sm"
+>
+	<input type="hidden" name="_subject" value={`New "${title}" message from the North Montpelier site`} />
+	<p class="hidden">
+		<label>Don't fill this out if you're human: <input name="_gotcha" /></label>
+	</p>
+
+	<h3 class="font-display text-xl font-semibold text-forest">{title}</h3>
+
+	<div>
+		<label for={`${formName}-name`} class="mb-1 block text-sm font-semibold text-ink">Name</label>
+		<input
+			id={`${formName}-name`}
+			name="name"
+			type="text"
+			required
+			autocomplete="name"
+			class="min-h-11 w-full rounded border border-granite-light bg-paper px-3 py-2 text-ink focus:outline-none focus:ring-2 focus:ring-brass"
+		/>
+	</div>
+
+	<div>
+		<label for={`${formName}-email`} class="mb-1 block text-sm font-semibold text-ink">Email</label>
+		<input
+			id={`${formName}-email`}
+			name="email"
+			type="email"
+			required
+			autocomplete="email"
+			class="min-h-11 w-full rounded border border-granite-light bg-paper px-3 py-2 text-ink focus:outline-none focus:ring-2 focus:ring-brass"
+		/>
+	</div>
+
+	{
+		interestOptions && interestOptions.length > 0 && (
+			<fieldset>
+				<legend class="mb-1 block text-sm font-semibold text-ink">I'm interested in</legend>
+				<div class="flex flex-col gap-2">
+					{interestOptions.map((option) => (
+						<label class="flex items-center gap-2 text-sm text-ink">
+							<input type="checkbox" name="interests" value={option} class="h-4 w-4 rounded border-granite-light" />
+							{option}
+						</label>
+					))}
+				</div>
+			</fieldset>
+		)
+	}
+
+	<div>
+		<label for={`${formName}-message`} class="mb-1 block text-sm font-semibold text-ink">Message</label>
+		<textarea
+			id={`${formName}-message`}
+			name="message"
+			rows="5"
+			required
+			class="w-full rounded border border-granite-light bg-paper px-3 py-2 text-ink focus:outline-none focus:ring-2 focus:ring-brass"
+		></textarea>
+	</div>
+
+	<button
+		type="submit"
+		class="min-h-11 self-start rounded bg-brick px-6 py-2 font-semibold text-paper transition-colors hover:bg-brick-dark"
+	>
+		Send
+	</button>
+
+	{
+		!FORMSPREE_ID && (
+			<p class="text-xs text-brick">
+				[PLACEHOLDER] This form isn't connected yet — set PUBLIC_FORMSPREE_ID (see README.md) so submissions send somewhere.
+			</p>
+		)
+	}
+</form>

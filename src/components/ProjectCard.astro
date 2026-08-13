@@ -1,0 +1,49 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, date, status, summary, cover, coverAlt } = project.data;
+
+const statusColors: Record<string, string> = {
+	Ongoing: 'bg-brass/20 text-brick-dark',
+	Completed: 'bg-forest/10 text-forest',
+};
+---
+
+<a
+	href={`/news/${project.id}`}
+	class="group flex flex-col overflow-hidden rounded-lg border border-granite-light/60 bg-card shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
+>
+	<div class="aspect-[16/10] w-full overflow-hidden bg-granite-light">
+		{
+			cover ? (
+				<Image
+					src={cover}
+					alt={coverAlt ?? ''}
+					width={480}
+					height={300}
+					class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+				/>
+			) : (
+				<div class="flex h-full w-full items-center justify-center text-sm text-granite">
+					[PLACEHOLDER PHOTO]
+				</div>
+			)
+		}
+	</div>
+	<div class="flex flex-1 flex-col p-5">
+		<span class:list={["mb-2 w-fit rounded-full px-2 py-0.5 text-xs font-semibold", statusColors[status] ?? 'bg-granite-light text-ink']}>
+			{status}
+		</span>
+		<h3 class="font-display text-xl font-semibold text-forest group-hover:text-brick">{title}</h3>
+		<p class="mt-2 flex-1 text-sm text-granite">{summary}</p>
+		<time datetime={date.toISOString()} class="mt-3 text-xs uppercase tracking-wide text-granite">
+			{date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+		</time>
+	</div>
+</a>

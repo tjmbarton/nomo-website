@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+---
+
+{
+	/* All the page text lives right in this file — the page heading below, and
+	   the paragraphs further down. There's no separate content file for this
+	   one; just edit the strings directly. The "North Montpelier" in the
+	   title below uses a non-breaking space (looks like a normal space) so
+	   the village's name never splits across two lines. */
+}
+<BaseLayout title="Our Story" description="The history and identity of North Montpelier, Vermont.">
+	<PageIntro eyebrow="Our Story" title="How a mill village became North Montpelier" />
+
+	<article class="mx-auto max-w-3xl px-4 pb-16 sm:px-6">
+		<div class="prose prose-neutral max-w-none font-display text-lg leading-relaxed text-ink">
+			<p class="text-sm font-sans uppercase tracking-wide text-brick">
+				[PLACEHOLDER — replace with real history narrative from capstone research]
+			</p>
+
+			<p>
+				North Montpelier grew up around the dam and mills on the Winooski River's north branch,
+				where water power once turned lumber and grain into the goods that built the surrounding
+				towns. What's left today is a village still shaped by that history — the pond behind the
+				dam, the worn granite foundations, and a tight cluster of homes, churches, and civic
+				buildings that has outlasted the industry that built it.
+			</p>
+
+			<h2 class="font-display text-2xl font-semibold text-forest">The mill years</h2>
+			<p>
+				[PLACEHOLDER] A paragraph or two on the founding of the mills, who built them, and what
+				they produced — pulled from the capstone research notes.
+			</p>
+
+			<h2 class="font-display text-2xl font-semibold text-forest">A village, not a town</h2>
+			<p>
+				[PLACEHOLDER] Explain North Montpelier's status as an unincorporated village within the
+				Town of East Montpelier, and why that distinction matters for how the community organizes itself
+				today.
+			</p>
+
+			<h2 class="font-display text-2xl font-semibold text-forest">North Montpelier today</h2>
+			<p>
+				[PLACEHOLDER] Bridge from history to the present-day character of the village — who lives
+				here now, what the community values, and how it's changing.
+			</p>
+		</div>
+	</article>
+</BaseLayout>

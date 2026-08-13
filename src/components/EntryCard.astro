@@ -1,0 +1,26 @@
+---
+interface Props {
+	href: string;
+	title: string;
+	description: string;
+	cta?: string;
+}
+
+const { href, title, description, cta = 'Explore' } = Astro.props;
+---
+
+<a
+	href={href}
+	class="group flex flex-col justify-between rounded-lg border border-granite-light/60 bg-card p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
+>
+	<div>
+		<h3 class="font-display text-2xl font-semibold text-forest">{title}</h3>
+		<p class="mt-2 text-granite">{description}</p>
+	</div>
+	<span class="mt-4 inline-flex items-center gap-1 font-semibold text-brick group-hover:text-brick-dark">
+		{cta}
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 transition-transform group-hover:translate-x-1">
+			<path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L11.29 6.15a.75.75 0 111.02-1.1l4.5 4.25a.75.75 0 010 1.1l-4.5 4.25a.75.75 0 11-1.02-1.1l3.098-3.1H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
+		</svg>
+	</span>
+</a>

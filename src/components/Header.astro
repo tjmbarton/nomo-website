@@ -1,0 +1,107 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/nomo-logo.png';
+
+// The site-wide navigation menu (appears in both the desktop bar and the
+// mobile dropdown, sourced from this one list). "label" is what visitors
+// see; "href" is the page it links to.
+const navItems = [
+	{ href: '/our-story', label: 'Our Story' },
+	{ href: '/explore', label: 'Explore & Visit' },
+	{ href: '/community', label: 'Community Resources' },
+	{ href: '/events', label: 'Events' },
+	{ href: '/news', label: 'News & Projects' },
+	{ href: '/contact', label: 'Get Involved' },
+];
+
+const currentPath = Astro.url.pathname;
+
+function isActive(href: string) {
+	return href === '/' ? currentPath === '/' : currentPath.startsWith(href);
+}
+---
+
+<header class="sticky top-0 z-40 bg-paper/95 shadow-[0_8px_24px_-16px_rgba(43,38,33,0.35)] backdrop-blur">
+	<div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-2 sm:px-6">
+		<a href="/" class="shrink-0" aria-label="North Montpelier, Vermont — home">
+			<Image src={logo} alt="North Montpelier, Vermont" width={160} class="h-12 w-auto sm:h-14" />
+		</a>
+
+		<nav class="hidden lg:block" aria-label="Primary">
+			<ul class="flex items-center gap-1">
+				{
+					navItems.map((item) => (
+						<li>
+							<a
+								href={item.href}
+								aria-current={isActive(item.href) ? 'page' : undefined}
+								class:list={[
+									'rounded-full px-3.5 py-2 font-medium transition-colors duration-200',
+									isActive(item.href)
+										? 'bg-brick/10 text-brick'
+										: 'text-ink hover:bg-brick/5 hover:text-brick',
+								]}
+							>
+								{item.label}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+
+		<button
+			id="nav-toggle"
+			type="button"
+			class="flex h-11 w-11 items-center justify-center rounded border border-granite-light text-forest lg:hidden"
+			aria-expanded="false"
+			aria-controls="mobile-nav"
+		>
+			<span class="sr-only">Toggle menu</span>
+			<svg id="icon-menu" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-6 w-6">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+			</svg>
+			<svg id="icon-close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="hidden h-6 w-6">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+			</svg>
+		</button>
+	</div>
+
+	<nav id="mobile-nav" class="hidden border-t border-granite-light/60 lg:hidden" aria-label="Primary mobile">
+		<ul class="flex flex-col gap-1 px-4 py-3 sm:px-6">
+			{
+				navItems.map((item) => (
+					<li>
+						<a
+							href={item.href}
+							aria-current={isActive(item.href) ? 'page' : undefined}
+							class:list={[
+								'block rounded-lg px-3 py-3 font-medium transition-colors duration-200',
+								isActive(item.href)
+									? 'bg-brick/10 text-brick'
+									: 'text-ink hover:bg-forest/5 hover:text-brick',
+							]}
+						>
+							{item.label}
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</nav>
+</header>
+
+<script>
+	const toggle = document.getElementById('nav-toggle');
+	const mobileNav = document.getElementById('mobile-nav');
+	const iconMenu = document.getElementById('icon-menu');
+	const iconClose = document.getElementById('icon-close');
+
+	toggle?.addEventListener('click', () => {
+		const expanded = toggle.getAttribute('aria-expanded') === 'true';
+		toggle.setAttribute('aria-expanded', String(!expanded));
+		mobileNav?.classList.toggle('hidden');
+		iconMenu?.classList.toggle('hidden');
+		iconClose?.classList.toggle('hidden');
+	});
+</script>
