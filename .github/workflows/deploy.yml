@@ -1,0 +1,47 @@
+name: Build and deploy
+
+# Hostinger's Git deployment feature only syncs files from a branch — it
+# doesn't run a build step. So this Action does the build here on every push
+# to main, then force-pushes the compiled static site (dist/) to a separate
+# "deploy" branch. Point Hostinger's Git deployment at THIS repo, branch
+# "deploy", deploy path "/", target folder "public_html" — see README.md
+# "Domain & hosting" for the exact hPanel steps.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          # Unset until added as repo secrets (Settings → Secrets and
+          # variables → Actions) — the site degrades gracefully without them
+          # (map/forms show a "coming soon" / "not connected" placeholder).
+          PUBLIC_MAPBOX_TOKEN: ${{ secrets.PUBLIC_MAPBOX_TOKEN }}
+          PUBLIC_FORMSPREE_ID: ${{ secrets.PUBLIC_FORMSPREE_ID }}
+
+      - name: Deploy dist/ to the deploy branch
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: deploy
+          folder: dist
+          clean: true

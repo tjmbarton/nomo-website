@@ -177,16 +177,27 @@ plain HTML/CSS/JS in `dist/`, so no Node runtime is needed on the server. The
 forms already use Formspree (see above) instead of Netlify Forms, so nothing
 Netlify-specific is required for the site to function for visitors.
 
-**Deploying a build:**
-1. `npm run build` locally (or in CI).
-2. Upload the contents of `dist/` to `public_html` via Hostinger's File
-   Manager or FTP. Re-deploy the same way after every content change.
+**Deploying a build — automatic (recommended):** `.github/workflows/deploy.yml`
+builds the site and force-pushes the compiled static output to a `deploy`
+branch on every push to `main` (Hostinger's own Git deployment feature only
+syncs files — it doesn't run a build step, so this Action does the building
+part it's missing). One-time setup in Hostinger's hPanel:
+1. Websites → your site → **Git**.
+2. Repository URL: `https://github.com/tjmbarton/nomo-website.git`, branch:
+   `deploy`.
+3. Deployment path: `public_html` (or `public_html/` — the site root).
+4. Enable **auto-deploy** so Hostinger re-pulls the `deploy` branch whenever
+   it updates.
 
-Hostinger's hPanel also has a Git deployment feature, but it only *syncs*
-files from a repo — it doesn't run a build step. If you want a git-based
-deploy instead of manual uploads, that means either pushing a pre-built
-`dist/` to a dedicated branch Hostinger watches, or setting up a GitHub Action
-that builds on push. Ask if you want that wired up.
+That's it from then on — push to `main`, GitHub Actions builds and updates
+`deploy`, Hostinger pulls it in. If `PUBLIC_MAPBOX_TOKEN` / `PUBLIC_FORMSPREE_ID`
+are ever set, add them as repo secrets (Settings → Secrets and variables →
+Actions) so the Action's build picks them up too.
+
+**Deploying a build — manual (fallback):**
+1. `npm run build` locally.
+2. Upload the contents of `dist/` to `public_html` via Hostinger's File
+   Manager or FTP.
 
 **Known limitation:** the Decap CMS at `/admin` uses the `git-gateway`
 backend, which requires Netlify Identity — it won't authenticate on
