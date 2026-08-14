@@ -33,3 +33,7 @@ pnpm-debug.log*
 /IMG_*.JPG
 /IMG_*.jpg
 /Screenshot *.png
+# raw camera-roll originals — only the specific photos actually used on the
+# site are copied (resized) into src/assets/ or src/content/*, and those ARE
+# tracked. This whole folder of 90+ multi-MB originals is not.
+/NoMo Images/

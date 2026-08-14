@@ -1,6 +1,49 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageIntro from '../components/PageIntro.astro';
+import { Image } from 'astro:assets';
+import historicDistrictMarker from '../assets/historic/historic-district-marker.jpg';
+import pondPostcard from '../assets/historic/pond-postcard.jpg';
+import aerialView from '../assets/historic/aerial-view.jpg';
+import woolenMill from '../assets/historic/woolen-mill.jpg';
+import mainStreet from '../assets/historic/main-street.jpg';
+import villagePostcardCars from '../assets/historic/village-postcard-cars.jpg';
+
+// Historic photos for the gallery at the bottom of the page — photographed
+// from the village's own archive of old prints and postcards. Add more by
+// importing an image above and adding an entry below (image/alt/caption).
+const historicPhotos = [
+	{
+		image: woolenMill,
+		alt: 'Black-and-white postcard of the Little Woolen Mfg. Co. mill complex in North Montpelier, Vermont.',
+		caption: 'Little Woolen Mfg. Co. — the mill that gave the village its industry.',
+	},
+	{
+		image: mainStreet,
+		alt: 'Early 1900s photo of a dirt Main Street in North Montpelier, with a church steeple and a boy standing in the road.',
+		caption: 'Main Street, North Montpelier, in its early-1900s heyday.',
+	},
+	{
+		image: pondPostcard,
+		alt: 'Sepia-toned postcard captioned "Pond at No. Montpelier, VT" showing the millpond and mill buildings.',
+		caption: '"Pond at No. Montpelier, Vt." — a postcard of the millpond.',
+	},
+	{
+		image: villagePostcardCars,
+		alt: 'Mid-1900s postcard captioned "N. Montpelier, Vt." showing parked cars and village storefronts.',
+		caption: 'N. Montpelier, Vt., mid-20th century — cars parked along the village storefronts.',
+	},
+	{
+		image: aerialView,
+		alt: 'Aerial photograph of North Montpelier village, pond, and surrounding farmland, captioned "North Montpelier, VT."',
+		caption: 'An aerial view of the village, the pond, and the roads that shape it.',
+	},
+	{
+		image: historicDistrictMarker,
+		alt: 'Vermont state historic marker for the North Montpelier Historic District, with a paragraph of village history text.',
+		caption: 'The Vermont state historic marker on VT-14, telling the short version of this story.',
+	},
+];
 ---
 
 {
@@ -47,4 +90,24 @@ import PageIntro from '../components/PageIntro.astro';
 			</p>
 		</div>
 	</article>
+
+	{
+		/* Historic photo gallery — photographed from the village's own archive.
+		   Captions are edited in the historicPhotos array above, not here. */
+	}
+	<section class="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
+		<h2 class="mb-2 font-display text-2xl font-semibold text-forest">From the archives</h2>
+		<p class="mb-8 max-w-2xl text-granite">A few photos and postcards from the village's own history.</p>
+
+		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+			{
+				historicPhotos.map((photo) => (
+					<figure class="overflow-hidden rounded-lg border border-granite-light/60 bg-card shadow-sm">
+						<Image src={photo.image} alt={photo.alt} width={640} height={480} class="aspect-[4/3] w-full object-cover" />
+						<figcaption class="p-4 text-sm text-granite">{photo.caption}</figcaption>
+					</figure>
+				))
+			}
+		</div>
+	</section>
 </BaseLayout>

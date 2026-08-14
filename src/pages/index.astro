@@ -16,8 +16,10 @@ const homepage = await getEntry('settings', 'homepage');
 	}
 	<Hero
 		eyebrow="Washington County, Vermont"
-		title="A village on the pond, past the old mill."
+		title="North Montpelier: the art of living well."
 		subtitle={homepage?.data.tagline}
+		image={homepage?.data.heroImage}
+		imageAlt="An old mill building on the edge of the North Montpelier millpond, framed by trees."
 	/>
 
 	{/* The 3 cards below the hero — title/description/button text for each */}

@@ -37,7 +37,7 @@ const explore = defineCollection({
 	schema: ({ image }) =>
 		z.object({
 			title: z.string(),
-			category: z.enum(['Trail', 'Water & Pond', 'Itinerary', 'Seasonal Activity']),
+			category: z.enum(['Trail', 'Water & Pond', 'Itinerary', 'Seasonal Activity', 'Events']),
 			season: z.array(z.enum(['Spring', 'Summer', 'Fall', 'Winter'])).default(['Spring', 'Summer', 'Fall', 'Winter']),
 			summary: z.string(),
 			cover: image().optional(),

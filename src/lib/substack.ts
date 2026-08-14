@@ -44,7 +44,17 @@ function stripHtml(str: string) {
 
 export async function fetchSubstackPosts(limit = 6): Promise<SubstackPost[]> {
 	try {
-		const res = await fetch(SUBSTACK_FEED_URL);
+		// Substack's CDN 403s requests with no/generic User-Agent (which is what
+		// GitHub Actions' runners send by default) — a real browser-like UA
+		// gets through. Confirmed by comparing a local curl (200) against the
+		// CI build log (403) for the same feed URL.
+		const res = await fetch(SUBSTACK_FEED_URL, {
+			headers: {
+				'User-Agent':
+					'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+				Accept: 'application/rss+xml, application/xml, text/xml, */*',
+			},
+		});
 		if (!res.ok) throw new Error(`Substack feed responded with ${res.status}`);
 		const xml = await res.text();
 		const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].slice(0, limit);

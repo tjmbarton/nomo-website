@@ -138,9 +138,6 @@ Then uncomment `local_backend: true` in `public/admin/config.yml`, run
 - **Photography** — every image slot renders a `[PLACEHOLDER PHOTO]` box
   when no image is set. Add real photos via the CMS or by dropping files in
   `public/images/` and referencing them in frontmatter.
-- **Favicon** — `public/favicon.svg` and `favicon.ico` are still the default
-  Astro logo (the header/nav logo itself has been replaced with the real
-  NOMO badge at `src/assets/nomo-logo.png`).
 - **Contact/volunteer/newsletter forms** — submit via
   [Formspree](https://formspree.io) (`src/components/ContactForm.astro`,
   `NewsletterSignup.astro`). Create a free Formspree account, create one form,

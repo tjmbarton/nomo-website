@@ -2,8 +2,8 @@
 title: "The Pond"
 category: "Water & Pond"
 season: ["Spring", "Summer", "Fall", "Winter"]
-summary: "[PLACEHOLDER] Description of the millpond — swimming, fishing, paddling in warm months, skating in winter."
+summary: "The old millpond is still the heart of the village in every season — swimming and paddling through the warm months, fishing along the banks, and skating once the ice sets in. Bring your own gear; there's no lifeguard, just neighbors."
+cover: "./the-pond-cover.jpg"
+coverAlt: "The North Montpelier millpond and dam, seen from the gravel access road on a clear summer day."
 order: 2
 ---
-
-[PLACEHOLDER CONTENT] Replace with real details on access points, seasonal activities (swimming, fishing, paddling, ice skating), and any local etiquette or rules worth noting.
