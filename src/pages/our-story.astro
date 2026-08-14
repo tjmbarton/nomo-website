@@ -2,46 +2,84 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageIntro from '../components/PageIntro.astro';
 import { Image } from 'astro:assets';
-import historicDistrictMarker from '../assets/historic/historic-district-marker.jpg';
 import pondPostcard from '../assets/historic/pond-postcard.jpg';
-import aerialView from '../assets/historic/aerial-view.jpg';
+import garagePostOffice from '../assets/historic/garage-post-office-winter.jpg';
+import millWorkersGroup from '../assets/historic/mill-workers-group.jpg';
+import victorianFarmhouse from '../assets/historic/victorian-farmhouse.jpg';
 import woolenMill from '../assets/historic/woolen-mill.jpg';
+import millUnderConstruction from '../assets/historic/mill-under-construction.jpg';
 import mainStreet from '../assets/historic/main-street.jpg';
+import buildingFire from '../assets/historic/building-fire.jpg';
 import villagePostcardCars from '../assets/historic/village-postcard-cars.jpg';
+import woolenMillTinted from '../assets/historic/woolen-mill-tinted.jpg';
+import prayStorePostcard from '../assets/historic/pray-store-postcard.jpg';
+import villagePanorama from '../assets/historic/village-panorama.jpg';
 
 // Historic photos for the gallery at the bottom of the page — photographed
 // from the village's own archive of old prints and postcards. Add more by
 // importing an image above and adding an entry below (image/alt/caption).
+// "caption" is intentionally blank for now — leave it "" until real captions
+// are written; the gallery just won't show a caption line for that photo.
 const historicPhotos = [
+	{
+		image: pondPostcard,
+		alt: 'Sepia-toned postcard captioned "Pond at No. Montpelier, VT" showing the millpond and mill buildings.',
+		caption: '',
+	},
+	{
+		image: garagePostOffice,
+		alt: 'Winter photo of the North Montpelier Garage and United States Post Office buildings, snow-covered.',
+		caption: '',
+	},
+	{
+		image: millWorkersGroup,
+		alt: 'Large group photo of mill workers posed outside a mill building.',
+		caption: '',
+	},
+	{
+		image: victorianFarmhouse,
+		alt: 'Photocopy of a Victorian farmhouse with a wraparound porch.',
+		caption: '',
+	},
 	{
 		image: woolenMill,
 		alt: 'Black-and-white postcard of the Little Woolen Mfg. Co. mill complex in North Montpelier, Vermont.',
-		caption: 'Little Woolen Mfg. Co. — the mill that gave the village its industry.',
+		caption: '',
+	},
+	{
+		image: millUnderConstruction,
+		alt: 'Mill building under construction, wooden frame exposed.',
+		caption: '',
 	},
 	{
 		image: mainStreet,
 		alt: 'Early 1900s photo of a dirt Main Street in North Montpelier, with a church steeple and a boy standing in the road.',
-		caption: 'Main Street, North Montpelier, in its early-1900s heyday.',
+		caption: '',
 	},
 	{
-		image: pondPostcard,
-		alt: 'Sepia-toned postcard captioned "Pond at No. Montpelier, VT" showing the millpond and mill buildings.',
-		caption: '"Pond at No. Montpelier, Vt." — a postcard of the millpond.',
+		image: buildingFire,
+		alt: 'A building fire in the village, watched by a crowd of villagers standing on the frozen pond.',
+		caption: '',
 	},
 	{
 		image: villagePostcardCars,
 		alt: 'Mid-1900s postcard captioned "N. Montpelier, Vt." showing parked cars and village storefronts.',
-		caption: 'N. Montpelier, Vt., mid-20th century — cars parked along the village storefronts.',
+		caption: '',
 	},
 	{
-		image: aerialView,
-		alt: 'Aerial photograph of North Montpelier village, pond, and surrounding farmland, captioned "North Montpelier, VT."',
-		caption: 'An aerial view of the village, the pond, and the roads that shape it.',
+		image: woolenMillTinted,
+		alt: 'Hand-tinted color postcard of the Little Woolen Mfg. Co. mill complex.',
+		caption: '',
 	},
 	{
-		image: historicDistrictMarker,
-		alt: 'Vermont state historic marker for the North Montpelier Historic District, with a paragraph of village history text.',
-		caption: 'The Vermont state historic marker on VT-14, telling the short version of this story.',
+		image: prayStorePostcard,
+		alt: 'Postcard of the "Geo. J. Pray" storefront and an inn, with a man and his dog sitting on the porch steps.',
+		caption: '',
+	},
+	{
+		image: villagePanorama,
+		alt: 'Panoramic postcard of North Montpelier village with the church steeple, mill buildings, and mountains beyond.',
+		caption: '',
 	},
 ];
 ---
@@ -104,7 +142,7 @@ const historicPhotos = [
 				historicPhotos.map((photo) => (
 					<figure class="overflow-hidden rounded-lg border border-granite-light/60 bg-card shadow-sm">
 						<Image src={photo.image} alt={photo.alt} width={640} height={480} class="aspect-[4/3] w-full object-cover" />
-						<figcaption class="p-4 text-sm text-granite">{photo.caption}</figcaption>
+						{photo.caption && <figcaption class="p-4 text-sm text-granite">{photo.caption}</figcaption>}
 					</figure>
 				))
 			}
