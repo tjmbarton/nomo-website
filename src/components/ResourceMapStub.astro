@@ -95,6 +95,22 @@ const categoriesPresent = [...new Set(resources.map((r) => r.category))];
 
 		map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'top-right');
 
+		// Mapbox reports bad tokens/quota/scope issues async via this event
+		// rather than throwing — without a handler, the map silently stays a
+		// blank tile-less canvas instead of showing something legible.
+		let hasShownFallback = false;
+		map.on('error', (e) => {
+			console.error('Mapbox error:', e.error);
+			if (hasShownFallback) return;
+			hasShownFallback = true;
+			el.innerHTML = `
+				<div class="flex h-[500px] w-full flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed border-granite-light bg-card p-8 text-center">
+					<p class="font-display text-lg font-semibold text-forest">Village map unavailable</p>
+					<p class="max-w-sm text-sm text-granite">The map couldn't load right now — this usually means the Mapbox token in .env needs its scopes or usage checked. See README.md.</p>
+				</div>
+			`;
+		});
+
 		if (resources.length > 0) {
 			const bounds = new mapboxgl.LngLatBounds();
 

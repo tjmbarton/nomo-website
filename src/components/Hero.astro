@@ -28,7 +28,14 @@ const { eyebrow, title, subtitle, image, imageAlt = '' } = Astro.props;
 			<div class="absolute inset-0 bg-gradient-to-br from-forest to-forest-dark" />
 		)
 	}
-	<div class="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/20 to-transparent" aria-hidden="true"></div>
+	{
+		/* Scrim strengthened from the original from-ink/80 via-ink/20 — the
+		   homepage hero photo (a bright pond/sky reflection) needs a heavier,
+		   taller dark zone for the title/subtitle to stay readable. If a future
+		   hero photo is naturally darker in its lower half, this can be eased
+		   back down. */
+	}
+	<div class="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/55 to-transparent" aria-hidden="true"></div>
 
 	<div class="relative mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
 		{eyebrow && (
